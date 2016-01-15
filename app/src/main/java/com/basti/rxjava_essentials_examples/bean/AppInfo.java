@@ -1,0 +1,41 @@
+package com.basti.rxjava_essentials_examples.bean;
+
+/**
+ * Created by SHIBW-PC on 2016/1/15.
+ */
+public class AppInfo implements Comparable<Object>{
+
+    long mLastUpdateTime;
+    String mName;
+    String mIcon;
+
+    public long getLastUpdateTime() {
+        return mLastUpdateTime;
+    }
+
+    public void setLastUpdateTime(long mLastUpdateTime) {
+        this.mLastUpdateTime = mLastUpdateTime;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(String mName) {
+        this.mName = mName;
+    }
+
+    public String getIcon() {
+        return mIcon;
+    }
+
+    public void setIcon(String mIcon) {
+        this.mIcon = mIcon;
+    }
+
+    @Override
+    public int compareTo(Object another) {
+        AppInfo f = (AppInfo)another;
+        return getName().compareTo(f.getName());
+    }
+}

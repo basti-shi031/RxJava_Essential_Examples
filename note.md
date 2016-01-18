@@ -68,15 +68,13 @@
       Log.i("TAG", String.valueOf(number));
   });
   ```
-
-    第一个3秒钟后发送，以后每5秒发送一个
-```java
-Observable<Long> observable3 = Observable.timer(3,5, TimeUnit.SECONDS);
-observable3.subscribe(number -> {
-    Log.i("TAG", String.valueOf(number));
-});
+  第一个3秒钟后发送，以后每5秒发送一个
+  ```java
+  Observable<Long> observable3 = Observable.timer(3,5, TimeUnit.SECONDS);
+  observable3.subscribe(number -> {
+      Log.i("TAG", String.valueOf(number));
+  });
 ```
-
   * filter() 过滤器
   ```java
   Observable<String> observable4 =  Observable.from(strings).filter(string -> string.length()==3);
@@ -85,7 +83,6 @@ observable3.subscribe(number -> {
   });
   ```
   发送长度为3的字符串
-
   * take() 前n个
   ```java
   Observable<String> observable5 = Observable.from(strings).take(3);
@@ -158,3 +155,17 @@ observable3.subscribe(number -> {
     Observable<String> observable9 = Observable.from(strings).elementAtOrDefault(100,"test");
     observable9.subscribe(string -> Log.i("TAG", string + ""));
     ```
+
+  2.转换observable
+
+    * Map家族
+      * Map()
+      ```java
+      Observable<Integer> observable10 = Observable.create(subscriber -> {
+          for (int i = 0; i < 5; i++) {
+              subscriber.onNext(i);
+          }
+      });
+      observable10.map(integer -> integer*50).subscribe(integer -> Log.i("TAG",String.valueOf(integer)));
+      ```
+      在创建observable后调用map函数提供一个新版本的数据给观察者。

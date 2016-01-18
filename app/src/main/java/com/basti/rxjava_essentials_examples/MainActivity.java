@@ -9,11 +9,14 @@ import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.Observer;
+import rx.Subscriber;
+import rx.functions.Func1;
+import rx.functions.Func2;
 
 public class MainActivity extends AppCompatActivity {
     private Button button;
-    private String[] strings = {"abc","cde","cde","asdfw","asdfw","weffwe","a","a","ewry"};
-    private int[] datas = {20,20,20,21,22,21,22,23,23};
+    private String[] strings = {"abc", "cde", "cde", "asdfw", "asdfw", "weffwe", "a", "a", "ewry"};
+    private int[] datas = {20, 20, 20, 21, 22, 21, 22, 23, 23};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,44 @@ public class MainActivity extends AppCompatActivity {
 
         //initDistinct();
 
-        initDistinctUntilChanged();
+        //initDistinctUntilChanged();
+
+        //initElementAt();
+
+        //initElementAtOrDefault();
+
+        //initMap();
+
+        initScan();
+    }
+
+    private void initScan() {
+        Observable<Integer> observable11 = Observable.just(1,2,3,4,5);
+        observable11.scan((integer, integer2) -> integer+integer2).subscribe(integer -> {
+            Log.i("TAG",String.valueOf(integer));
+        });
+
+
+    }
+
+    private void initMap() {
+        Observable<Integer> observable10 = Observable.create(subscriber -> {
+            for (int i = 0; i < 5; i++) {
+                subscriber.onNext(i);
+            }
+        });
+        observable10.map(integer -> integer * 50).subscribe(integer -> Log.i("TAG", String.valueOf(integer)));
+    }
+
+    private void initElementAtOrDefault() {
+        Observable<String> observable9 = Observable.from(strings).elementAtOrDefault(100, "test");
+        observable9.subscribe(string -> Log.i("TAG", string + ""));
+    }
+
+    private void initElementAt() {
+
+        Observable<String> observable8 = Observable.from(strings).elementAt(2);
+        observable8.subscribe(string -> Log.i("TAG", string + ""));
     }
 
     private void initDistinctUntilChanged() {
@@ -53,13 +93,13 @@ public class MainActivity extends AppCompatActivity {
             subscriber.onNext(21);
             subscriber.onNext(23);
             subscriber.onCompleted();
-        }).distinctUntilChanged().subscribe(number -> Log.i("TAG",number+""));
+        }).distinctUntilChanged().subscribe(number -> Log.i("TAG", number + ""));
     }
 
     private void initDistinct() {
         Observable<String> observable7 = Observable.from(strings).distinct();
         observable7.subscribe(string -> {
-            Log.i("TAG",string);
+            Log.i("TAG", string);
         });
     }
 
@@ -68,27 +108,27 @@ public class MainActivity extends AppCompatActivity {
         //结果是 e f g 不是 g f e
         Observable<String> observable6 = Observable.from(strings).takeLast(3);
         observable6.subscribe(string -> {
-            Log.i("TAG",string);
+            Log.i("TAG", string);
         });
     }
 
     private void initTake() {
         Observable<String> observable5 = Observable.from(strings).take(3);
         observable5.subscribe(string -> {
-            Log.i("TAG",string);
+            Log.i("TAG", string);
         });
     }
 
     private void initFilter() {
 
-       Observable<String> observable4 =  Observable.from(strings).filter(string -> string.length()==3);
+        Observable<String> observable4 = Observable.from(strings).filter(string -> string.length() == 3);
         observable4.subscribe(string -> {
-            Log.i("TAG",string);
+            Log.i("TAG", string);
         });
     }
 
     private void initTimer2() {
-        Observable<Long> observable3 = Observable.timer(3,5, TimeUnit.SECONDS);
+        Observable<Long> observable3 = Observable.timer(3, 5, TimeUnit.SECONDS);
         observable3.subscribe(number -> {
             Log.i("TAG", String.valueOf(number));
         });
@@ -107,16 +147,16 @@ public class MainActivity extends AppCompatActivity {
         Observable<Integer> deferred = Observable.defer(this::getInt);
 
         button.setOnClickListener(v -> {
-                deferred.subscribe(number -> {
-                    Log.i("TAG", String.valueOf(number));
-                });
+            deferred.subscribe(number -> {
+                Log.i("TAG", String.valueOf(number));
             });
+        });
     }
 
     private void initInterval() {
         Observable<Long> observable2 = Observable.interval(3, TimeUnit.SECONDS);
         observable2.subscribe(number -> {
-           Log.i("TAG", String.valueOf(number));
+            Log.i("TAG", String.valueOf(number));
         });
     }
 
@@ -130,22 +170,22 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(Throwable e) {
-                Log.i("range onError","onError");
+                Log.i("range onError", "onError");
             }
 
             @Override
             public void onNext(Integer integer) {
-                Log.i("TAG",String.valueOf(integer));
+                Log.i("TAG", String.valueOf(integer));
             }
         });
     }
 
     public Observable<Integer> getInt() {
         return Observable.create(subscriber -> {
-            if (subscriber.isUnsubscribed()){
-                return ;
+            if (subscriber.isUnsubscribed()) {
+                return;
             }
-            Log.i("TAG","GETINT");
+            Log.i("TAG", "GETINT");
             subscriber.onNext(50);
             subscriber.onCompleted();
         });
